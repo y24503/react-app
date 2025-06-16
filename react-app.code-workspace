@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "react-app",
+			"path": "."
+		},
+		{
+			"name": "public",
+			"path": "../public"
+		},
+		{
+			"name": "src",
+			"path": "../src"
+		}
+	],
+	"settings": {}
+}

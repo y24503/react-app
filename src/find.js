@@ -1,54 +1,56 @@
-// src/find.js
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './Firebase';
 import Navigation from './components/Navigation';
 
-function FindUserPage() {
-  const [users, setUsers] = useState([]);
+function FindTaskPage() {
+  const [tasks, setTasks] = useState([]);
   const [keyword, setKeyword] = useState('');
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState([]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const usersCol = collection(db, 'mydata');
-      const userSnapshot = await getDocs(usersCol);
-      const userList = userSnapshot.docs.map(doc => ({
+    const fetchTasks = async () => {
+      const tasksCol = collection(db, 'tasks');
+      const taskSnapshot = await getDocs(tasksCol);
+      const taskList = taskSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
-      setUsers(userList);
-      setFilteredUsers(userList);
+      setTasks(taskList);
+      setFilteredTasks(taskList);
     };
 
-    fetchUsers();
+    fetchTasks();
   }, []);
 
   const handleSearch = (e) => {
     const kw = e.target.value;
     setKeyword(kw);
 
-    const filtered = users.filter(user =>
-      user.name.toLowerCase().includes(kw.toLowerCase())
+    const filtered = tasks.filter(task =>
+      task.title.toLowerCase().includes(kw.toLowerCase()) ||
+      task.description.toLowerCase().includes(kw.toLowerCase())
     );
-    setFilteredUsers(filtered);
+    setFilteredTasks(filtered);
   };
 
   return (
-    <div>
+    <div className="p-6">
       <Navigation />
-      <h2>ユーザー検索ページ</h2>
+      <h2 className="text-2xl font-bold mb-4">タスク検索ページ</h2>
       <input
         type="text"
-        placeholder="名前で検索"
+        placeholder="タイトルまたは詳細で検索"
         value={keyword}
         onChange={handleSearch}
-        style={{ marginBottom: '10px', padding: '5px' }}
+        className="border px-2 py-1 mb-4 w-full max-w-md"
       />
-      <ul>
-        {filteredUsers.map(user => (
-          <li key={user.id}>
-            {user.name} - {user.mail} - {user.dorm ? "寮生" : "通学"}
+      <ul className="space-y-2">
+        {filteredTasks.map(task => (
+          <li key={task.id} className="bg-white p-4 rounded shadow">
+            <div><strong>タイトル:</strong> {task.title}</div>
+            <div><strong>詳細:</strong> {task.description}</div>
+            <div><strong>状態:</strong> {task.completed ? '完了' : '未完了'}</div>
           </li>
         ))}
       </ul>
@@ -56,4 +58,4 @@ function FindUserPage() {
   );
 }
 
-export default FindUserPage;
+export default FindTaskPage;

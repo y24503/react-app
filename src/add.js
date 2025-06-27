@@ -1,59 +1,73 @@
-// src/add.js
 import { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from './Firebase';
 import { useNavigate } from 'react-router-dom';
 
-function AddUser() {
-  const [name, setName] = useState('');
-  const [mail, setMail] = useState('');
-  const [dorm, setDorm] = useState(true);
-  const navigate = useNavigate(); // ページ遷移用
+function AddTask() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [completed, setCompleted] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await addDoc(collection(db, 'mydata'), {
-        name,
-        mail,
-        dorm
+      await addDoc(collection(db, 'tasks'), {
+        title,
+        description,
+        completed
       });
-      alert('ユーザーを追加しました');
-      navigate('/'); // 追加後トップページへ戻る
+      alert('タスクを追加しました');
+      navigate('/');
     } catch (error) {
       alert('追加に失敗しました: ' + error.message);
     }
   };
 
   return (
-    <div>
-      <h1>ユーザー追加</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">タスクを追加</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label>name：</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} required />
-        </div>
-        <div>
-          <label>mail：</label>
+          <label className="block">タイトル：</label>
           <input
             type="text"
-            value={mail}
-            onChange={(e) => setMail(e.target.value)}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             required
+            className="border px-2 py-1 w-full"
           />
         </div>
         <div>
-          <label>dorm：</label>
-          <select value={dorm} onChange={(e) => setDorm(e.target.value === 'true')}>
-            <option value="true">寮生</option>
-            <option value="false">通学</option>
+          <label className="block">詳細：</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            className="border px-2 py-1 w-full"
+          ></textarea>
+        </div>
+        <div>
+          <label className="block">完了状況：</label>
+          <select
+            value={completed}
+            onChange={(e) => setCompleted(e.target.value === 'true')}
+            className="border px-2 py-1"
+          >
+            <option value="false">未完了</option>
+            <option value="true">完了</option>
           </select>
         </div>
-        <button type="submit">追加</button>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          追加
+        </button>
       </form>
     </div>
   );
 }
 
-export default AddUser;
+export default AddTask;

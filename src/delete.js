@@ -1,50 +1,56 @@
-// src/delete.js
 import { useEffect, useState } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from './Firebase';
 
-function DeleteUser() {
-  const [users, setUsers] = useState([]);
+function DeleteTask() {
+  const [tasks, setTasks] = useState([]);
 
-  // Firestoreからユーザー一覧を取得
-  const fetchUsers = async () => {
-    const usersCol = collection(db, 'mydata');
-    const userSnapshot = await getDocs(usersCol);
-    const userList = userSnapshot.docs.map(doc => ({
+  // Firestoreからタスク一覧を取得
+  const fetchTasks = async () => {
+    const tasksCol = collection(db, 'tasks');
+    const taskSnapshot = await getDocs(tasksCol);
+    const taskList = taskSnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
-    setUsers(userList);
+    setTasks(taskList);
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchTasks();
   }, []);
 
-  // ユーザー削除関数
-  const deleteUser = async (id) => {
-    const confirmDelete = window.confirm('本当に削除しますか？');
+  // タスク削除関数
+  const deleteTask = async (id) => {
+    const confirmDelete = window.confirm('本当にこのタスクを削除しますか？');
     if (!confirmDelete) return;
 
     try {
-        console.log(id);
-      await deleteDoc(doc(db, 'mydata', id));
+      await deleteDoc(doc(db, 'tasks', id));
       alert('削除しました');
-      fetchUsers(); // 再取得
+      fetchTasks(); // 更新されたタスクリストを再取得
     } catch (error) {
       alert('削除に失敗しました: ' + error.message);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 text-center">
-      <h2>ユーザー削除ページ</h2>
-      <ul>
-        {users.map(user => (
-          <li key={user.id}>
-            {user.name} - {user.mail} - {user.dorm ? '寮生' : '通学'}
-            &nbsp;
-            <button onClick={() => deleteUser(user.id)}>削除</button>
+    <div className="min-h-screen bg-gray-100 text-center p-6">
+      <h2 className="text-2xl font-bold mb-4">タスク削除ページ</h2>
+      <ul className="space-y-2">
+        {tasks.map(task => (
+          <li key={task.id} className="bg-white p-4 rounded shadow flex justify-between items-center">
+            <div className="text-left">
+              <div><strong>タイトル:</strong> {task.title}</div>
+              <div><strong>詳細:</strong> {task.description}</div>
+              <div><strong>状態:</strong> {task.completed ? '完了' : '未完了'}</div>
+            </div>
+            <button
+              onClick={() => deleteTask(task.id)}
+              className="bg-red-500 text-white px-4 py-2 rounded"
+            >
+              削除
+            </button>
           </li>
         ))}
       </ul>
@@ -52,4 +58,4 @@ function DeleteUser() {
   );
 }
 
-export default DeleteUser;
+export default DeleteTask;

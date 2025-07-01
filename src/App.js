@@ -108,6 +108,8 @@ function App() {
             <Route path="/add" element={<AddUser />} />
             <Route path="/delete" element={<DeleteUser />} />
             <Route path="/find" element={<FindUser />} />
+            <Route path="/jsx" element={<JSXUser />} />
+            <Route path="/edit" element={<EditTaskPageUser />} />
           </>
         ) : (
           <>
@@ -116,9 +118,6 @@ function App() {
             <Route path="/find" element={<p className="text-center mt-10">ログインしてください</p>} />
             <Route path="/jsx" element={<p className="text-center mt-10">ログインしてください</p>} />
             <Route path="/edit" element={<p className="text-center mt-10">ログインしてください</p>} />
-            <Route path="/add" element={<p>ログインしてください </p>} />
-            <Route path="/delete" element={<p>ログインしてください </p>} />
-            <Route path="/find" element={<p>ログインしてください </p>} />
           </>
         )}
       </Routes>

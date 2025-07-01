@@ -78,6 +78,7 @@ function App() {
                   <th className="border px-4 py-2">ステータス</th>
                 </tr>
               </thead>
+              {user?(
               <tbody>
                 {tasks.map(task => (
                   <tr key={task.id} className="text-center">
@@ -88,6 +89,11 @@ function App() {
                   </tr>
                 ))}
               </tbody>
+              ):(
+                <tbody>
+                <tr><th colSpan={4} className="text-gray-600 mt-4">ログインするとデータが見られます。 </th></tr>
+                </tbody>
+              )}
             </table>
           </div>
         } />
@@ -98,7 +104,10 @@ function App() {
             <Route path="/delete" element={<Delete />} />
             <Route path="/find" element={<Find />} />
             <Route path="/jsx" element={<Jsx />} />
-            <Route path="/edit" element={<EditTaskPage />} /> {/* ← 追加 */}
+            <Route path="/edit" element={<EditTaskPage />} />
+            <Route path="/add" element={<AddUser />} />
+            <Route path="/delete" element={<DeleteUser />} />
+            <Route path="/find" element={<FindUser />} />
           </>
         ) : (
           <>
@@ -106,7 +115,10 @@ function App() {
             <Route path="/delete" element={<p className="text-center mt-10">ログインしてください</p>} />
             <Route path="/find" element={<p className="text-center mt-10">ログインしてください</p>} />
             <Route path="/jsx" element={<p className="text-center mt-10">ログインしてください</p>} />
-            <Route path="/edit" element={<p className="text-center mt-10">ログインしてください</p>} /> {/* ← 追加 */}
+            <Route path="/edit" element={<p className="text-center mt-10">ログインしてください</p>} />
+            <Route path="/add" element={<p>ログインしてください </p>} />
+            <Route path="/delete" element={<p>ログインしてください </p>} />
+            <Route path="/find" element={<p>ログインしてください </p>} />
           </>
         )}
       </Routes>

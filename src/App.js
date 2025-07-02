@@ -78,22 +78,22 @@ function App() {
                   <th className="border px-4 py-2">ステータス</th>
                 </tr>
               </thead>
-              {user?(
               <tbody>
-                {tasks.map(task => (
-                  <tr key={task.id} className="text-center">
-                    <td className="border px-4 py-2">{task.id}</td>
-                    <td className="border px-4 py-2">{task.title}</td>
-                    <td className="border px-4 py-2">{task.description}</td>
-                    <td className="border px-4 py-2">{task.completed ? "完了" : "未完了"}</td>
+                {user ? (
+                  tasks.map(task => (
+                    <tr key={task.id} className="text-center">
+                      <td className="border px-4 py-2">{task.id}</td>
+                      <td className="border px-4 py-2">{task.title}</td>
+                      <td className="border px-4 py-2">{task.description}</td>
+                      <td className="border px-4 py-2">{task.completed ? "完了" : "未完了"}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="text-gray-600 text-center py-4">ログインするとデータが見られます。</td>
                   </tr>
-                ))}
+                )}
               </tbody>
-              ):(
-                <tbody>
-                <tr><th colSpan={4} className="text-gray-600 mt-4">ログインするとデータが見られます。 </th></tr>
-                </tbody>
-              )}
             </table>
           </div>
         } />
@@ -105,11 +105,8 @@ function App() {
             <Route path="/find" element={<Find />} />
             <Route path="/jsx" element={<Jsx />} />
             <Route path="/edit" element={<EditTaskPage />} />
-            <Route path="/add" element={<AddUser />} />
-            <Route path="/delete" element={<DeleteUser />} />
-            <Route path="/find" element={<FindUser />} />
-            <Route path="/jsx" element={<JSXUser />} />
-            <Route path="/edit" element={<EditTaskPageUser />} />
+            {/* 必要であればユーザー操作専用のルート名に変更 */}
+            {/* <Route path="/user-add" element={<AddUser />} /> */}
           </>
         ) : (
           <>
